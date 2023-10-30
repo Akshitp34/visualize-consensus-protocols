@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './form.css'
 
-export let SendClientRequestFrom = () => {
+export let SendClientRequestFrom = ( {startVisualization} ) => {
     let [ requestKey, setRequestKey ] = useState( '' );
     let [ requestValue, setRequestValue ] = useState( '' );
 
@@ -16,6 +16,7 @@ export let SendClientRequestFrom = () => {
     let sendClientRequest = ( event ) => {
         event.preventDefault();
         // implement server call to initiate kvservice request
+        startVisualization();
         console.log( requestKey );
         console.log( requestValue );
     }
