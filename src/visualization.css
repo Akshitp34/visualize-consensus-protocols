@@ -1,0 +1,9 @@
+.replica-node circle {
+    stroke: #fa2d2d;
+    stroke-width: .2;
+}
+
+line {
+    stroke: aliceblue;
+    stroke-width: .2;
+}
