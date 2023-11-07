@@ -34,52 +34,60 @@ export let NodeVisualization = ( {start} ) => {
             </line> */}
                   {/* <image href={msgSVG} width="3" height="3" x={nodeConnections.x1}
                     y={nodeConnections.y1 - 1.5}></image> */}
-            {start && showCommunication()}
+            {start && showCommunication( [0, 1, 2, 3], [0, 1, 2, 3] )}
         </svg>
     )
 }
 
-let showCommunication = () => {
+let showCommunication = ( fromNodes, toNodes ) => {
     const svgSelector = d3.select( 'svg' );
-    svgSelector.append( 'line' )
-                .attr('x1', nodeConnections.x1)
-                .attr('y1', nodeConnections.y1)
-                .attr('x2', nodeConnections.x2)
-                .attr('y2', nodeConnections.y2)
-    svgSelector.append( 'line' )
-                .attr('x1', nodeConnections.x1)
-                .attr('y1', nodeConnections.y1)
-                .attr('x2', nodeConnections.x2)
-                .attr('y2', nodeConnections.y2 + (1*3*radius))
-    svgSelector.append( 'line' )
-                .attr('x1', nodeConnections.x1)
-                .attr('y1', nodeConnections.y1)
-                .attr('x2', nodeConnections.x2)
-                .attr('y2', nodeConnections.y2 + (2*3*radius))
-    svgSelector.append( 'line' )
-                .attr('x1', nodeConnections.x1)
-                .attr('y1', nodeConnections.y1)
-                .attr('x2', nodeConnections.x2)
-                .attr('y2', nodeConnections.y2 + (3*3*radius))
-    for(let i=0; i<numberOfReplicas;i++) {
-        svgSelector.append( 'image' )
-                    .attr( 'id', `for_R${i}`)
-                    .attr( 'href', msgSVG )
-                    .attr( 'width', 3 )
-                    .attr( 'height', 3 )
-                    .attr('x', nodeConnections.x1)
-                    .attr('y', nodeConnections.y1 - 1.5);
+
+    // x co-ordinate is same for all nodes
+    let fromNodeCoord_Y;
+    const toNodeStartCoord_Y = nodeConnections.y2;
+
+    // render all communication lines
+    for( let i=0; i < fromNodes.length; i++ ) {
+        fromNodeCoord_Y = nodeConnections.y1 + fromNodes[i]*3*radius;
+        for( let j=0; j < toNodes.length; j++ ) {
+            svgSelector.append( 'line' )
+                    .attr('x1', nodeConnections.x1)
+                    .attr('y1', fromNodeCoord_Y)
+                    .attr('x2', nodeConnections.x2)
+                    .attr('y2', toNodeStartCoord_Y + (toNodes[j]*3*radius) )
+        }
     }
-    for(let i=0; i < numberOfReplicas; i++ ) {
-        const smvImg = d3.select( `#for_R${i}` )
-                    .transition()
-                    .duration(1000)
-                    .attr('x', 100-xStart-radius - 3 )
-                    .attr('y', nodeConnections.y1 + (i*3*radius) - 1.5)
-                    .transition()
-                    .duration(1000)
-                    .style("visibility", "hidden");
+
+    // render all message icon images
+    for( let i=0; i < fromNodes.length; i++ ) {
+        fromNodeCoord_Y = nodeConnections.y1 + fromNodes[i]*3*radius;
+        for( let j=0; j < toNodes.length; j++ ) {
+            svgSelector.append( 'image' )
+                        .attr( 'id', `line_${fromNodes[i]}${toNodes[j]}`)
+                        .attr( 'href', msgSVG )
+                        .attr( 'width', 3 )
+                        .attr( 'height', 3 )
+                        .attr('x', nodeConnections.x1)
+                        .attr('y', fromNodeCoord_Y - 1.5);
+        }
     }
+
+    // transition message icons along the communication lines
+    for(let i=0; i < fromNodes.length; i++ ) {
+        for( let j=0; j < toNodes.length; j++ ) {
+            const smvImg = d3.select( `#line_${fromNodes[i]}${toNodes[j]}` )
+                        .transition()
+                        .duration(1000)
+                        .attr('x', 100-xStart-radius - 3 )
+                        .attr('y', toNodeStartCoord_Y + (toNodes[j]*3*radius) - 1.5)
+                        .transition()
+                        .duration(1000)
+                        .style("visibility", "hidden");
+        }
+    }
+
+    // hide all communication lines 
+    // todo: maybe use .remove() instead of hiding 
     svgSelector.selectAll( 'line' )
                 .transition()
                 .duration(2000)
