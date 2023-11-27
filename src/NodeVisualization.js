@@ -2,8 +2,60 @@ import * as d3 from 'd3'
 import { useEffect, useRef } from 'react';
 import './visualization.css';
 import msgSVG from './message.svg'
-
 import { ReplicaNodePair } from './ReplicaNodePair';
+
+let dummyConsensusData2 = {
+    primary_id: 0,
+    phases: 
+        [
+            {
+                phase: "Pre-Prepare",
+                sender_id: 0,
+                receivers: [0,1,2,3]
+            },
+            {
+                phase: "Prepare",
+                sender_id: 0,
+                receivers: [0,1,2,3]
+            },
+            {
+                phase: "Prepare",
+                sender_id: 1,
+                receivers: [0,1,2,3]
+            },
+            {
+                phase: "Prepare",
+                sender_id: 2,
+                receivers: [0,1,2,3]
+            },
+            {
+                phase: "Prepare",
+                sender_id: 3,
+                receivers: [0,1,2,3]
+            },
+            {
+                phase: "Commit",
+                sender_id: 0,
+                receivers: [0,1,2,3]
+            },
+            {
+                phase: "Commit",
+                sender_id: 1,
+                receivers: [0,1,2,3]
+            },
+            {
+                phase: "Commit",
+                sender_id: 2,
+                receivers: [0,1,2,3]
+            },
+            {
+                phase: "Commit",
+                sender_id: 3,
+                receivers: [0,1,2,3]
+            }
+        ]
+}
+
 
 let numberOfReplicas = 4;
 let xStart = 10;
@@ -16,11 +68,13 @@ let nodeConnections =
             x2: 100-xStart-radius,
             y2: yStart
         };
-export let NodeVisualization = ( {start} ) => {
-     
-        /* useEffect( () => {
-            showCommunication();            
-        }, []); */
+export let NodeVisualization = ( {start, data} ) => {
+    
+    // let communicationData;
+    // if ( data !== null ) {
+    //     communicationData = processConsensusData( data );
+    // }
+    data && showCommunicationNew( dummyConsensusData2.phases )
     return (
         <svg viewBox='0 0 100 50' style={{
             border: "2px solid gold",
@@ -28,19 +82,25 @@ export let NodeVisualization = ( {start} ) => {
                 {[...Array(numberOfReplicas)].map((x,i) =>
                 <ReplicaNodePair index={i}/>
                 )}
-            {/* <line x1={nodeConnections.x1} y1={nodeConnections.y1}
-                  x2={nodeConnections.x2} y2={nodeConnections.y2 +(2*3*radius)}
-                  style={{visibility:'hidden'}}>
-            </line> */}
-                  {/* <image href={msgSVG} width="3" height="3" x={nodeConnections.x1}
-                    y={nodeConnections.y1 - 1.5}></image> */}
-            {start && showCommunication( [0, 1, 2, 3], [0, 1, 2, 3] )}
         </svg>
     )
 }
 
-let showCommunication = ( fromNodes, toNodes ) => {
-    const svgSelector = d3.select( 'svg' );
+let showCommunication = ( fromNodes, toNodes, phaseName ) => {
+    const svgSelector = d3.select( 'svg' )
+
+    //if (svgSelector.classed(`svg-phase-${phaseName}`))
+    svgSelector.classed(`svg-phase-${phaseName}`, true);
+        const phaseNameText = svgSelector.append('text')
+            .attr( 'id', phaseName)
+            .attr( 'x', 45)
+            .attr( 'y', 5)
+            .attr("font-size", "2")
+            .style( 'fill', 'white')
+            .text( phaseName )
+
+    // svgSelector.transition()
+    //             .style("background", "red");;
 
     // x co-ordinate is same for all nodes
     let fromNodeCoord_Y;
@@ -77,12 +137,13 @@ let showCommunication = ( fromNodes, toNodes ) => {
         for( let j=0; j < toNodes.length; j++ ) {
             const smvImg = d3.select( `#line_${fromNodes[i]}${toNodes[j]}` )
                         .transition()
-                        .duration(1000)
+                        .duration(2000)
+                        .ease(d3.easeLinear)
                         .attr('x', 100-xStart-radius - 3 )
                         .attr('y', toNodeStartCoord_Y + (toNodes[j]*3*radius) - 1.5)
                         .transition()
-                        .duration(1000)
-                        .style("visibility", "hidden");
+                        .duration(100)
+                        .remove()
         }
     }
 
@@ -90,8 +151,25 @@ let showCommunication = ( fromNodes, toNodes ) => {
     // todo: maybe use .remove() instead of hiding 
     svgSelector.selectAll( 'line' )
                 .transition()
-                .duration(2000)
+                .duration(2100)
+                .remove()
+    svgSelector.select( `#${phaseName}` )
                 .transition()
-                .duration(2000)
-                .style('visibility', 'hidden');
+                .on('end', () => {
+                    svgSelector.classed(`svg-phase-${phaseName}`, false);
+                })
+                .duration(2100)
+                .remove()
+                
 }
+
+let showCommunicationNew = ( data ) => {
+    d3.select( 'svg' )
+        .data(data)
+        .join()
+        .transition()
+        .on( 'start', function(d,i) { showCommunication( [d.sender_id], d.receivers, d.phase)})
+        .delay( function(d,i) {
+            return i*2200
+        })
+}   

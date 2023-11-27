@@ -24,16 +24,16 @@ export let SendClientRequestFrom = ( {startVisualization} ) => {
 
     return (
         <>
-            <form className="request-form" onSubmit={sendClientRequest}>
-            <label>
-                Key:
-                <input type="text" value={requestKey} onChange={updateRequestKey}></input>
-            </label>
-            <label>
-                Value:
-                <input type="text" value={requestValue} onChange={updateRequestValue}></input>
-            </label>
-            <button type='submit'>Send</button>
+            <form className="request-form">
+                <label>
+                    Key:
+                    <input type="text" value={requestKey} onChange={updateRequestKey}></input>
+                </label>
+                <label>
+                    Value:
+                    <input type="text" value={requestValue} onChange={updateRequestValue}></input>
+                </label>
+                <button type='submit' onClick={sendClientRequest}>Send</button>
             </form>
         </>
     );
