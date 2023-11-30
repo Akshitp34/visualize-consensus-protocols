@@ -9,13 +9,21 @@ line {
 }
 
 .svg-phase-Pre-Prepare {
-    background-color: rgb(255, 97, 6)
+    fill: rgb(255, 97, 6)
 }
 
 .svg-phase-Prepare {
-    background-color: rgb(92, 15, 72)
+    fill: rgb(92, 15, 72)
 }
 
 .svg-phase-Commit {
-    background-color: rgb(10, 131, 20) 
+    fill: rgb(10, 131, 20) 
+}
+
+.svg-phase-New-Txns {
+    fill: rgb(51, 184, 232)
+}
+
+.svg-phase-Response {
+    fill: rgb(248, 74, 205) 
 }
