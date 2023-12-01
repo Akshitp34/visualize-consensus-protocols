@@ -6,63 +6,63 @@ import { useEffect, useRef } from 'react';
 import msgSVG from './message.svg'
 
 let dummyConsensusData = {
-    primary_id: 0,
+    primary_id: 1,
     phases: 
         [
             {
                 phase: "New-Txns",
-                senders: [0],
-                receivers: [0]
+                senders: [5],
+                receivers: [1]
             },
             {
                 phase: "Pre-Prepare",
-                senders: [0],
-                receivers: [0,1,2,3]
-            },
-            {
-                phase: "Prepare",
-                senders: [0],
-                receivers: [0,1,2,3]
+                senders: [1],
+                receivers: [1,2,3,4]
             },
             {
                 phase: "Prepare",
                 senders: [1],
-                receivers: [0,1,2,3]
+                receivers: [1,2,3,4]
             },
             {
                 phase: "Prepare",
                 senders: [2],
-                receivers: [0,1,2,3]
+                receivers: [1,2,3,4]
             },
             {
                 phase: "Prepare",
                 senders: [3],
-                receivers: [0,1,2,3]
+                receivers: [1,2,3,4]
             },
             {
-                phase: "Commit",
-                senders: [0],
-                receivers: [0,1,2,3]
+                phase: "Prepare",
+                senders: [4],
+                receivers: [1,2,3,4]
             },
             {
                 phase: "Commit",
                 senders: [1],
-                receivers: [0,1,2,3]
+                receivers: [1,2,3,4]
             },
             {
                 phase: "Commit",
                 senders: [2],
-                receivers: [0,1,2,3]
+                receivers: [1,2,3,4]
             },
             {
                 phase: "Commit",
                 senders: [3],
-                receivers: [0,1,2,3]
+                receivers: [1,2,3,4]
+            },
+            {
+                phase: "Commit",
+                senders: [4],
+                receivers: [1,2,3,4]
             },
             {
                 phase: "Response",
-                senders: [0,1,2,3],
-                receivers: [0]
+                senders: [1,2,3,4],
+                receivers: [5]
             }
         ]
 }
@@ -140,7 +140,7 @@ let showReplicaToReplicaCommunication = ( fromNodes, toNodes, phaseName ) => {
                         .duration(2000)
                         .ease(d3.easeLinear)
                         .attr('x', 100-xStart-radius - 3 )
-                        .attr('y', toNodeStartCoord_Y + (toNodes[j]*3*radius) - 1.5)
+                        .attr('y', toNodeStartCoord_Y + ((toNodes[j]-1)*3*radius) - 1.5)
                         .transition()
                         .duration(100)
                         .remove()
@@ -197,7 +197,7 @@ let showClientToReplicasCommunication = ( fromNodes, toNodes, phaseName ) => {
                         .duration(2000)
                         .ease(d3.easeLinear)
                         .attr('x', 100-xStart-radius - 3 )
-                        .attr('y', toNodeStartCoord_Y + (toNodes[j]*3*radius) - 1.5)
+                        .attr('y', toNodeStartCoord_Y + ((toNodes[j]-1)*3*radius) - 1.5)
                         .transition()
                         .duration(100)
                         .remove()
@@ -256,7 +256,7 @@ let showReplicasToClientCommunication = ( fromNodes, toNodes, phaseName ) => {
                         .duration(2000)
                         .ease(d3.easeLinear)
                         .attr('x', 100-xStart-radius - 3 )
-                        .attr('y', 25 + (toNodes[j]*3*radius) - 1.5)
+                        .attr('y', 25 - 1.5)
                         .transition()
                         .duration(100)
                         .remove()
@@ -285,13 +285,13 @@ let showReplicasToClientCommunication = ( fromNodes, toNodes, phaseName ) => {
 let showCommunicationLines = ( svgSelector, fromNodes, toNodes, from_x, from_y, to_x, to_y ) => {
     let from_y_start;
     for( let i=0; i < fromNodes.length; i++ ) {
-        from_y_start = from_y + fromNodes[i]*3*radius;
+        from_y_start = from_y + ((fromNodes[i]-1)%4)*3*radius;
         for( let j=0; j < toNodes.length; j++ ) {
             svgSelector.append( 'line' )
                     .attr('x1', from_x)
                     .attr('y1', from_y_start)
                     .attr('x2', to_x)
-                    .attr('y2', to_y + (toNodes[j]*3*radius) )
+                    .attr('y2', to_y + (((toNodes[j]-1)%4)*3*radius) )
             svgSelector.append( 'image' )
                     .attr( 'id', `line_${fromNodes[i]}${toNodes[j]}`)
                     .attr( 'href', msgSVG )
