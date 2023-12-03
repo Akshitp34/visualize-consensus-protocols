@@ -57,6 +57,8 @@ export let SendClientRequestFrom = ( {startVisualization} ) => {
                     Value:
                     <input type="text" value={requestValue} onChange={updateRequestValue}></input>
                 </label>
+                <br/>
+                <br/>
                 <button type='submit' onClick={sendClientRequest}>Send</button>
             </form>
         </>
