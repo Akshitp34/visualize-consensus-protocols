@@ -9,6 +9,7 @@ import { ClientToReplicasView } from './ClientToReplicasView';
 import { ReplicasToClientView } from './ReplicasToClientView';
 
 export let NodeVisualization = ( {view, numberOfReplicas, primary} ) => {
+    const inputRef = useRef(null);
     let showView = ( view ) => {
         switch(view) {
             case 0:
@@ -21,12 +22,20 @@ export let NodeVisualization = ( {view, numberOfReplicas, primary} ) => {
                 return <></>
         }
     }
+    if(view >= 0 && view <=2 ) {
+        inputRef?.current?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "start"
+          });
+    }
     return (
         <svg viewBox='0 0 100 50' style={{
             border: "2px solid gold",
-            margin: '30px'}}>
+            margin: '30px'}}
+            ref={inputRef}>
                 { showView(view)  }
-                
+             
         </svg>
     )
 }
