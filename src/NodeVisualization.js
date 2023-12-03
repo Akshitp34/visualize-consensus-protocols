@@ -8,15 +8,15 @@ import { ReplicaToReplicaView } from './ReplicaToReplicaView';
 import { ClientToReplicasView } from './ClientToReplicasView';
 import { ReplicasToClientView } from './ReplicasToClientView';
 
-export let NodeVisualization = ( {view} ) => {
+export let NodeVisualization = ( {view, numberOfReplicas} ) => {
     let showView = ( view ) => {
         switch(view) {
             case 0:
-                return <ClientToReplicasView numberOfReplicas={4}/>
+                return <ClientToReplicasView numberOfReplicas={numberOfReplicas}/>
             case 1:
-                return <ReplicaToReplicaView numberOfReplicas={4}/>
+                return <ReplicaToReplicaView numberOfReplicas={numberOfReplicas}/>
             case 2:
-                return <ReplicasToClientView numberOfReplicas={4}/>
+                return <ReplicasToClientView numberOfReplicas={numberOfReplicas}/>
             default:
                 return <></>
         }

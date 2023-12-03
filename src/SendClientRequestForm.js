@@ -32,14 +32,14 @@ export let SendClientRequestFrom = ( {startVisualization} ) => {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(keyValueData)
+            }
           }
-          const response = await fetch('url', options );
+          const response = await fetch(`http://localhost:8080/api/data?key=${keyValueData.key}&value=${keyValueData.value}`, options );
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
           const data = await response.json();
+          console.log(data)
           return(data);
         } catch (error) {
           console.error('Error:', error);
