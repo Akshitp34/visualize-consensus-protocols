@@ -5,7 +5,7 @@ let client_y = 25
 let replicas_start_x = 10
 let replicas_start_y = 5
 
-export let ReplicasToClientView = ( {numberOfReplicas} ) => {
+export let ReplicasToClientView = ( {numberOfReplicas, primary} ) => {
     let radius = 21/(2*(numberOfReplicas-1))
     let node_spacing = 2*radius + (19/(numberOfReplicas-1))
     return(
@@ -16,10 +16,17 @@ export let ReplicasToClientView = ( {numberOfReplicas} ) => {
                 nodeName='C'/>
 
             {[...Array(numberOfReplicas)].map((x,i) =>
-                <ReplicaNodeCircle centerXCord={replicas_start_x}
+                i+1 === primary ? 
+                    <ReplicaNodeCircle centerXCord={replicas_start_x}
+                        centerYCord={replicas_start_y+i*node_spacing}
+                        radius={radius}
+                        nodeName={`R${i}`}
+                        primary={true}/> :
+                    <ReplicaNodeCircle centerXCord={replicas_start_x}
                     centerYCord={replicas_start_y+i*node_spacing}
                     radius={radius}
-                    nodeName={`R${i}`}/>
+                    nodeName={`R${i}`}
+                    primary={false}/>
             )}
         </g>
     )

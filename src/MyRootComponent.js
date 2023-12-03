@@ -91,7 +91,9 @@ export let MyRootComponent = () => {
         <>
             <SendClientRequestFrom startVisualization={startVisualization}/>
             <div style={{display: 'flex'}}>
-            <NodeVisualization view={visPhase} numberOfReplicas={dummyConsensusData.numberOfReplicas}/>
+            <NodeVisualization view={visPhase} 
+                numberOfReplicas={consensusData && consensusData.numberOfReplicas}
+                primary={consensusData && consensusData.primary_id}/>
             </div>
         </>
     )
