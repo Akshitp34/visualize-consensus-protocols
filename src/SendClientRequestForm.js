@@ -13,14 +13,38 @@ export let SendClientRequestFrom = ( {startVisualization} ) => {
         setRequestValue( event.target.value);
     }
 
-    let sendClientRequest = ( event ) => {
+    let sendClientRequest = async ( event ) => {
         event.preventDefault();
         // implement server call to initiate kvservice request
-        startVisualization();
+        const keyValueData = {
+            key: requestKey,
+            value: requestValue
+        }
+        let consensusDataFromServer = await getConsensusData(keyValueData)
+        startVisualization( consensusDataFromServer );
         console.log( requestKey );
         console.log( requestValue );
     }
 
+    const getConsensusData = async ( keyValueData ) => {
+        try {
+          const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(keyValueData)
+          }
+          const response = await fetch('url', options );
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          return(data);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }
 
     return (
         <>

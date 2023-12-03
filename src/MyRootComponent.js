@@ -82,11 +82,11 @@ export let MyRootComponent = () => {
     let [startVisFlag, setStartVisFlag] = useState(false);
     let [consensusData, setConsensusData] = useState(null)
     let [visPhase, setVisPhase] = useState(0);
-    let startVisualization = () => {
+    let startVisualization = ( consensusDataFromServer ) => {
         setStartVisFlag(!startVisFlag);
         if( consensusData === null ) {
-            prevConsensusData = consensusData
-            setConsensusData(dummyConsensusData);
+            prevConsensusData = consensusDataFromServer
+            setConsensusData(consensusDataFromServer);
         }
     }
 
