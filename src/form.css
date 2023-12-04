@@ -9,3 +9,32 @@
 .request-form input {
     margin-left: 10px;
 }
+
+.vis-send-button {
+    display: block;
+    background-color: rgb(81, 81, 0);
+    color: white;
+    font-size: 17px;
+    padding: 10px 30px;
+    border-radius: 5px;
+    margin: 10px 125px;
+    cursor: pointer;
+}
+
+.vis-input {
+    width: 10%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+}
+
+.vis-label {
+    display: inline;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #ffffff;
+    font-family: Helvetica Neue,Helvetica,Arial,sans-serif; 
+    font-size: 18px;
+  }
