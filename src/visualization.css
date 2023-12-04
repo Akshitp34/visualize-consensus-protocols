@@ -28,7 +28,12 @@ line {
 .svg-phase-Response {
     fill: rgb(248, 74, 205) 
 }
-
+.svg-phase-View-Change-Request {
+    fill: rgb(255, 0, 0) 
+}
+.svg-phase-New-View {
+    fill: rgb(247, 0, 185) 
+}
 .primary-node {
     fill:#ffff00
 }

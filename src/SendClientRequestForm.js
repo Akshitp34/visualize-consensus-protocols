@@ -4,6 +4,7 @@ import './form.css'
 export let SendClientRequestFrom = ( {startVisualization} ) => {
     let [ requestKey, setRequestKey ] = useState( '' );
     let [ requestValue, setRequestValue ] = useState( '' );
+    const [showAlert, setShowAlert] = useState(false);
 
     let updateRequestKey = ( event ) => {
         setRequestKey( event.target.value);
@@ -15,6 +16,7 @@ export let SendClientRequestFrom = ( {startVisualization} ) => {
 
     let sendClientRequest = async ( event ) => {
         event.preventDefault();
+        setShowAlert(true);
         // implement server call to initiate kvservice request
         const keyValueData = {
             key: requestKey,
@@ -29,12 +31,18 @@ export let SendClientRequestFrom = ( {startVisualization} ) => {
     const getConsensusData = async ( keyValueData ) => {
         try {
           const options = {
+            //method: 'POST',
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json'
-            }
+            },
+            //body: JSON.stringify(keyValueData)
           }
-          const response = await fetch(`http://localhost:8080/api/data?key=${keyValueData.key}&value=${keyValueData.value}`, options );
+          let url = `http://localhost:8080/api/data?key=${keyValueData.key}&value=${keyValueData.value}`
+          const response = await fetch(url, options );
+          const delay = await new Promise(resolve => setTimeout(resolve, 2000));
+          setShowAlert(false);
+          //console.log(jsonData)
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
@@ -59,6 +67,11 @@ export let SendClientRequestFrom = ( {startVisualization} ) => {
                 </label>
                 <button type='submit' className='vis-send-button' onClick={sendClientRequest}>Send</button>
             </form>
+            {showAlert && (
+                <div className="alert">
+                <p>Sending data...</p>
+                </div>
+            )}
         </>
     );
 }

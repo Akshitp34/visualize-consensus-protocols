@@ -77,10 +77,7 @@ export let MyRootComponent = () => {
     let [visPhase, setVisPhase] = useState(null);
     let startVisualization = ( consensusDataFromServer ) => {
         setStartVisFlag(!startVisFlag);
-        if( consensusData === null ) {
-            prevConsensusData = consensusDataFromServer
-            setConsensusData(consensusDataFromServer);
-        }
+        setConsensusData(consensusDataFromServer);
     }
 
     useEffect(() => {
@@ -331,11 +328,11 @@ let showCommunicationNew = ( data, setVisPhase ) => {
         .join()
         .transition()
         .on( 'start', function(d,i) {
-            if( d.phase === 'New-Txns') {
+            if( d.senders[0] === data.numberOfReplicas+1) {
                 setVisPhase(0)
                 showClientToReplicasCommunication( d.senders, d.receivers, d.phase, data.numberOfReplicas )
             }
-            else if( d.phase === 'Response' ) {
+            else if( d.receivers[0] === data.numberOfReplicas+1 ) {
                 setVisPhase(2)
                 showReplicasToClientCommunication( d.senders, d.receivers, d.phase, data.numberOfReplicas )                
             }
